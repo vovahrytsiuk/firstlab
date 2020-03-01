@@ -11,6 +11,8 @@
                 "-std=c++17",
                 "-stdlib=libc++",
                 "main.cpp",
+                "rec.cpp",
+                "rec.h",
                 "--debug"
             ],
             "group": {
