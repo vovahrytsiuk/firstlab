@@ -49,3 +49,50 @@ void parsing(string line, vector<string>& countryName, vector<int>& score) {
     }
   }
 }
+
+int** calculate_mark(vector<vector<int>>scores) {
+  int** marks = new int* [scores.size()];
+  for (int i = 0; i < scores.size(); i++) {
+    marks[i] = new int[scores[i].size()];
+  }
+  for (int i = 0; i < scores[0].size(); i++) {
+    unsigned int* rat = rating(scores, i);
+    marks[rat[0]][i] = 12;
+    marks[rat[1]][i] = 10;
+    for (int j = 2; j < 10; j++) {
+      marks[rat[j]][i] = 10 - j;
+    }
+    for (int j = 10; j < scores.size(); j++) {
+      marks[rat[j]][i] = 0;
+    }
+
+  }
+  return marks;
+
+}
+
+unsigned int* rating(vector<vector<int>>scores, int iterator) {
+  unsigned int* rating = new unsigned int[scores.size()];
+  for (unsigned int i = 0; i < scores.size(); i++) {
+    rating[i] = i;
+  }
+  for (unsigned int i = 0; i < scores.size(); i++) {
+    for (unsigned int j = i; j < scores.size(); j++) {
+      if (scores[rating[i]][iterator] < scores[rating[j]][iterator]) {
+        int temp = rating[i];
+        rating[i] = rating[j];
+        rating[j] = temp;
+
+      }
+    }
+  }
+  return rating;
+}
+
+int* sums(int** marks, int n, int m) {
+  int* sums = new int[n];
+  for (int i = 0; i < n; i++) {
+    sums[i] = calculate_sum(marks[i], m);
+  }
+  return sums;
+}
