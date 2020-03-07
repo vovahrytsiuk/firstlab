@@ -21,6 +21,9 @@ int** calculate_mark(vector<vector<int>>scores);
 unsigned int* rating(vector<vector<int>>scores, int iterator);
 int* sums(int** marks, int n, int m);
 int calculate_sum(int* score, int m);
+void sort(vector<string>& countryName, int* sum, int n);
+void print_top(vector<string> countryName, int* sum);
+
 
 
 

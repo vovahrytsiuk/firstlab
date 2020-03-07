@@ -25,6 +25,7 @@ void input_data(path file, vector<string>& countryName, vector<vector<int>>& sco
   getline(f, str);
   for (int i = 0; i < n; i++) {
     getline(f, str);
+    
     parsing(str, countryName, scores[i]);
   }
 }
@@ -95,4 +96,32 @@ int* sums(int** marks, int n, int m) {
     sums[i] = calculate_sum(marks[i], m);
   }
   return sums;
+}
+int calculate_sum(int* score, int m) {
+  int sum = 0;
+  for (int j = 0; j < m; j++) {
+    sum += score[j];
+  }
+  return sum;
+}
+void sort(vector<string>& countryName, int* sum, int n) {
+  for (int i = 0; i < n; i++) {
+    for (int j = i; j < n; j++) {
+      if (sum[i] < sum[j]) {
+        int temp = sum[i];
+        sum[i] = sum[j];
+        sum[j] = temp;
+        string tempr = countryName[i];
+        countryName[i] = countryName[j];
+        countryName[j] = tempr;
+      }
+    }
+  }
+}
+
+void print_top(vector<string> countryName, int* sum) {
+  fstream fout("result.csv");
+  for (int i = 0; i < 10; i++) {
+    fout << countryName[i] << "," << sum[i] << endl;
+  }
 }
