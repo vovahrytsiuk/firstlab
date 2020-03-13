@@ -8,11 +8,11 @@ using namespace std;
 
 
 int main(){
-	string directory;
-  getline(cin, directory);
-  vector<path> files = input(directory);
+	
+  
+  vector<string> files = input();
   vector<string> countryName;
-  vector<vector<int>> scores;
+  vector<vector<int> > scores;
   get_info(files, countryName, scores);
   int** mark = calculate_mark(scores);
   int n = scores.size();

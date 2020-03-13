@@ -1,23 +1,26 @@
 #include "rec.h"
 
-vector<path> input(const string directory) {
-  vector<path>files;
-  const directory_iterator begin(directory);
-  const directory_iterator end;
-  copy_if(begin, end, back_inserter(files),
-    [](const path& p) {
-      return is_regular_file(p) && p.extension() == ".csv";
-    });
+vector<string> input() {
+  vector<string>files;
+  cout << "Enter number of files to process" << endl;
+  int numberOfFiles;
+  cin >> numberOfFiles;
+  cout << "Enter name of files" << endl;
+  for(int i = 0; i < numberOfFiles; i++){
+    string fileName;
+    cin >> fileName;
+    files.push_back(fileName);
+  }
   return files;
 }
 
-void get_info(vector<path> files, vector<string>& countryName, vector<vector<int>>& scores) {
+void get_info(vector<string> files, vector<string>& countryName, vector<vector<int> >& scores) {
   for (auto& f : files) {
     input_data(f, countryName, scores);
   }
 }
 
-void input_data(path file, vector<string>& countryName, vector<vector<int>>& scores) {
+void input_data(string file, vector<string>& countryName, vector<vector<int> >& scores) {
   fstream f(file);
   int n;
   f >> n;
@@ -25,12 +28,13 @@ void input_data(path file, vector<string>& countryName, vector<vector<int>>& sco
   getline(f, str);
   for (int i = 0; i < n; i++) {
     getline(f, str);
-    
-    parsing(str, countryName, scores[i]);
+
+    scores.push_back(parsing(str, countryName));
   }
 }
 
-void parsing(string line, vector<string>& countryName, vector<int>& score) {
+vector<int> parsing(string line, vector<string>& countryName) {
+  vector<int> score;
   string temp = "";
   int iter = 0;
   while (line[iter] != ',') {
@@ -39,19 +43,27 @@ void parsing(string line, vector<string>& countryName, vector<int>& score) {
   }
   iter++;
   countryName.push_back(temp);
+  
   temp = "";
   for (; iter < line.length(); iter++) {
-    if (line[iter] == ',') {
-      score.push_back(stoi(temp));
+    if (line[iter] == ',' || iter == line.length()-1) {
+      if(line[iter] != ','){
+        temp += line[iter];
+      }
+      int tempr = stoi(temp);
+      score.push_back(tempr);
       temp = "";
     }
     else {
       temp += line[iter];
     }
   }
+ 
+  return score;
+
 }
 
-int** calculate_mark(vector<vector<int>>scores) {
+int** calculate_mark(vector<vector<int> >scores) {
   int** marks = new int* [scores.size()];
   for (int i = 0; i < scores.size(); i++) {
     marks[i] = new int[scores[i].size()];
@@ -72,7 +84,7 @@ int** calculate_mark(vector<vector<int>>scores) {
 
 }
 
-unsigned int* rating(vector<vector<int>>scores, int iterator) {
+unsigned int* rating(vector<vector<int> >scores, int iterator) {
   unsigned int* rating = new unsigned int[scores.size()];
   for (unsigned int i = 0; i < scores.size(); i++) {
     rating[i] = i;
@@ -122,6 +134,6 @@ void sort(vector<string>& countryName, int* sum, int n) {
 void print_top(vector<string> countryName, int* sum) {
   fstream fout("result.csv");
   for (int i = 0; i < 10; i++) {
-    fout << countryName[i] << "," << sum[i] << endl;
+    cout << countryName[i] << "," << sum[i] << endl;
   }
 }
